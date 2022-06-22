@@ -2,6 +2,8 @@ import random
 
 solution = []
 user_guess = []
+available_guesses = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
+
 tries_left = 8
 
 def choose_word(words):
@@ -36,15 +38,24 @@ def prepare_game(word):
 def start_game(tries):
     while tries > 0 and '_' in user_guess:
         print(" ".join(user_guess))
+        print(f"Availble Guesses: {available_guesses}")
         letter_guess = input("Guess a letter? ").lower()
-        if letter_guess in solution:
+        if letter_guess in available_guesses:
+            index = available_guesses.index(letter_guess)
+            available_guesses[index] = '❌'
+
+            if letter_guess in solution:
             #these loops allow for multiples of the same letter
-            for idx in range(len(solution)):
-                if solution[idx] == letter_guess:
-                    user_guess[idx] = letter_guess
+                for idx in range(len(solution)):
+                    if solution[idx] == letter_guess:
+                        user_guess[idx] = letter_guess
+            else:
+                tries -= 1
+                print(f"You have {tries} tries remaining")
+                
         else:
-            tries -= 1
-            print(f"You have {tries} remaining")
+            print("Invalid guess. Guess Again")
+
     #when loop ends determines if you won or lost
     if '_' in user_guess:
         print(f"You Lose! The correct word was {(''.join(solution))}.")
