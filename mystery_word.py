@@ -1,39 +1,41 @@
+import random
+
 solution = []
 user_guess = []
 tries_left = 8
 
 def prepare_game(word):
     word_list = list(word)
-    word_list.pop()
     for char in word_list:
         solution.append(char)
         user_guess.append("_")
     
 def start_game(tries):
-    print(user_guess)
-    while tries > 0:
+    while tries > 0 and '_' in user_guess:
+        print(user_guess)
         letter_guess = input("Guess a letter? ").lower()
         if letter_guess in solution:
-            print("This letter is in the word")
+            #these loops allow for multiples of the same letter
+            for idx in range(len(solution)):
+                if solution[idx] == letter_guess:
+                    user_guess[idx] = letter_guess
         else:
             tries -= 1
             print(f"You have {tries} remaining")
-        
-
-
+    
+    if '_' in user_guess:
+        print("You Lose! Try Again")
+    else:
+        print("You Won!")
 
 def play_game(file):
     with open(file) as open_file:
         read_file = open_file.read()
-
-    prepare_game(read_file)
+    
+    prepare_game(random.choice(read_file.split()))
+    print(solution)
 
     start_game(tries_left)
-
-    print(solution, user_guess)
-
-
-
 
 if __name__ == "__main__":
     import argparse
@@ -50,12 +52,3 @@ if __name__ == "__main__":
     else:
         print(f"{file} does not exist!")
         exit(1)
-
-# - [ ] READ a word (test-word.txt)
-# - [ ] Initialize solution list [C,A,T] that splits up each letter
-# - [ ] Initialize user input list with blanks [_ , _, _] based on length of solution word. (len(solution_word))
-# - [ ] Ask user for a letter (input(“what is your guess”)
-#     - [ ] Compare user input with solution list like we did with stop words in the word_frequency assignment
-#         - [ ] If user input is in the solution then replace user input list blank with the letter guessed. [C, _, _]
-#         - [ ] Else say user guess is wrong and to guess again
-
