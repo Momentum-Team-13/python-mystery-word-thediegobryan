@@ -1,4 +1,7 @@
 import random
+import os
+
+clearConsole = lambda: os.system('cls' if os.name in ('nt', 'dos') else 'clear')
 
 solution = []
 user_guess = []
@@ -37,6 +40,7 @@ def prepare_game(word):
     
 def start_game(tries):
     while tries > 0 and '_' in user_guess:
+        print(f"You have {tries} tries remaining")
         print(" ".join(user_guess))
         print(f"Availble Guesses: {available_guesses}")
         letter_guess = input("Guess a letter? ").lower()
@@ -51,9 +55,9 @@ def start_game(tries):
                         user_guess[idx] = letter_guess
             else:
                 tries -= 1
-                print(f"You have {tries} tries remaining")
-                
+            clearConsole()       
         else:
+            clearConsole()
             print("Invalid guess. Guess Again")
 
     #when loop ends determines if you won or lost
@@ -63,8 +67,8 @@ def start_game(tries):
         print(f"{(''.join(solution))} is the Word! You Won!")
 
 
-def play_game(file):
-    with open(file) as open_file:
+def play_game():
+    with open("words.txt") as open_file:
         read_file = open_file.read()
     
     game_is_running = 'yes'
@@ -79,17 +83,4 @@ def play_game(file):
             game_is_running = input("Do you want to play again? yes or no \n")
 
 if __name__ == "__main__":
-    import argparse
-    from pathlib import Path
-
-    parser = argparse.ArgumentParser(
-        description='Mystery word game')
-    parser.add_argument('file', help='file to read')
-    args = parser.parse_args()
-
-    file = Path(args.file)
-    if file.is_file():
-        play_game(file)
-    else:
-        print(f"{file} does not exist!")
-        exit(1)
+    play_game()
