@@ -47,17 +47,25 @@ def start_game(tries):
             print(f"You have {tries} remaining")
     #when loop ends determines if you won or lost
     if '_' in user_guess:
-        print("You Lose! Try Again")
+        print(f"You Lose! The correct word was {(''.join(solution))}.")
     else:
-        print("You Won!")
+        print(f"{(''.join(solution))} is the Word! You Won!")
 
 
 def play_game(file):
     with open(file) as open_file:
         read_file = open_file.read()
-    chosen_word = choose_word(read_file)
-    prepare_game(chosen_word)
-    start_game(tries_left)
+    
+    game_is_running = 'yes'
+    while game_is_running == 'yes':
+        chosen_word = choose_word(read_file)
+        prepare_game(chosen_word)
+        start_game(tries_left)
+
+        game_is_running = input("Do you want to play again? yes or no \n")
+        while game_is_running != 'yes' and game_is_running != 'no':
+            print('Not an option, pick again')
+            game_is_running = input("Do you want to play again? yes or no \n")
 
 if __name__ == "__main__":
     import argparse
